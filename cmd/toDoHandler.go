@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
+	"os"
 	"time"
 )
 
@@ -49,6 +51,30 @@ func (t *ToDoList) deleteTask(index int) error {
 	}
 
 	*t = append(list[:index-1], list[index+1:]...)
+
+	return nil
+}
+
+func (t *ToDoList) loadFile(fName string) error {
+	file, err := os.ReadFile(fName)
+
+	if err != nil {
+		// ErrNotExist will check if file does not exist.
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return err
+	}
+
+	if len(file) == 0 {
+		panic("file empty!!")
+	}
+
+	err = json.Unmarshal(file, t)
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
