@@ -1,6 +1,9 @@
 package main
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type ToDo struct {
 	Title       string
@@ -23,4 +26,17 @@ func (t *ToDoList) addTask(task string) {
 
 	*t = append(*t, newTask)
 
+}
+
+func (t *ToDoList) completedTask(taskIndex int) error {
+	list := *t
+
+	if taskIndex <= 0 || taskIndex >= len(list) {
+		return errors.New("invalid task index")
+	}
+
+	list[taskIndex-1].CompletedAt = time.Now()
+	list[taskIndex].IsCompleted = true
+
+	return nil
 }
