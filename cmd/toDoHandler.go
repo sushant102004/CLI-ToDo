@@ -40,3 +40,15 @@ func (t *ToDoList) completedTask(taskIndex int) error {
 
 	return nil
 }
+
+func (t *ToDoList) deleteTask(index int) error {
+	list := *t
+
+	if index <= 0 || index >= len(list) {
+		return errors.New("invalid index")
+	}
+
+	*t = append(list[:index-1], list[index+1:]...)
+
+	return nil
+}
